@@ -18,6 +18,12 @@ def print_ranking_stats(movies: dict[str, int]):
     print(f"\033[95mmovie with min ranking is: {movie_with_min_value}" + END_COLOR)
 
 
+def recommend_by_genre(movies: list[Movie], genre_list: list[str]):
+    recommended_movies = [movie for movie in movies if movie.genre in genre_list]
+    recommended_movies = sorted(recommended_movies, key=lambda x: -x.ranking)
+    return recommended_movies
+
+
 def main():
     movies = []
 
@@ -28,10 +34,11 @@ def main():
         if movie_name in [movie.name for movie in movies]:
             print("movie already exist")
             continue
-        ranking = input("enter movie ranking, from 1 to 10: ")
+        ranking = int(input("enter movie ranking, from 1 to 10: "))
         genre = input("enter movie genre: ")
         movie = Movie(movie_name, ranking, genre)
         movies.append(movie)
+    recommend_by_genre(movies, ["comedy"])
 
 
 if __name__ == '__main__':
