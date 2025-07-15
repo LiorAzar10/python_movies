@@ -1,3 +1,8 @@
+from movie import Movie
+
+END_COLOR = "\033[0m"
+
+
 def print_movies(movies: list[str]):
     print("movies list:\n")
     for i, m in enumerate(movies, 1):
@@ -5,7 +10,6 @@ def print_movies(movies: list[str]):
 
 
 def print_ranking_stats(movies: dict[str, int]):
-    END_COLOR = "\033[0m"
     rankings = movies.values()
     print(f"\033[31maverage ranking is {sum(rankings) / len(rankings)}" + END_COLOR)
     movie_with_max_value = max(movies, key=movies.get)
@@ -15,19 +19,19 @@ def print_ranking_stats(movies: dict[str, int]):
 
 
 def main():
-    movies = {}
+    movies = []
 
     while True:
-        movie = input("enter movie name, exit to quit: ")
-        if movie.strip().lower() == "exit":
+        movie_name = input("enter movie name, exit to quit: ")
+        if movie_name.strip().lower() == "exit":
             break
-        if movie in movies.keys():
+        if movie_name in [movie.name for movie in movies]:
             print("movie already exist")
             continue
         ranking = input("enter movie ranking, from 1 to 10: ")
-        movies[movie] = int(ranking)
-
-    print_ranking_stats(movies)
+        genre = input("enter movie genre: ")
+        movie = Movie(movie_name, ranking, genre)
+        movies.append(movie)
 
 
 if __name__ == '__main__':
