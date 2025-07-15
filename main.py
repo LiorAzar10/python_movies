@@ -55,7 +55,7 @@ def ask_user_for_genres():
     return genres
 
 
-def main():
+def ask_for_users():
     users = []
     while True:
         username = input("enter username, exit to break: ")
@@ -68,6 +68,23 @@ def main():
 
         user = User(username, movies, genres)
         users.append(user)
+    return users
+
+
+def main():
+    users = [User("lior", [Movie("movie1", 9, "comedy")], ["comedy"]),
+             User("lior2", [Movie("movie1", 9, "comedy"), Movie("movie3", 10, "comedy")], ["drama", "comedy"]),
+             User("lior3", [Movie("movie1", 9, "comedy"), Movie("movie4", 6, "drama")], ["drama", "comedy"])]
+
+    username = input("enter username: ")
+    UserAuthenticate.login(username)
+    current_user = [user for user in users if users if user.name == username][0]
+    similar_users = [user for user in users if current_user.has_joined_movies(user) and user.name != username]
+    for user in similar_users:
+        print(f"loved movies by {user.name}:")
+        for movie in user.movies:
+            if movie.name not in current_user.get_movie_names():
+                print(movie)
 
 
 if __name__ == '__main__':
