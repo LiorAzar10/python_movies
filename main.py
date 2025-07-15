@@ -1,6 +1,9 @@
 from movie import Movie
+from user_authenticate import UserAuthenticate
+from user import User
 
 END_COLOR = "\033[0m"
+EXIT = "exit"
 
 
 def print_movies(movies: list[str]):
@@ -24,12 +27,12 @@ def recommend_by_genre(movies: list[Movie], genre_list: list[str]):
     return recommended_movies
 
 
-def main():
+def ask_user_for_movies():
     movies = []
 
     while True:
         movie_name = input("enter movie name, exit to quit: ")
-        if movie_name.strip().lower() == "exit":
+        if movie_name.strip().lower() == EXIT:
             break
         if movie_name in [movie.name for movie in movies]:
             print("movie already exist")
@@ -38,7 +41,33 @@ def main():
         genre = input("enter movie genre: ")
         movie = Movie(movie_name, ranking, genre)
         movies.append(movie)
-    recommend_by_genre(movies, ["comedy"])
+    return movies
+
+
+def ask_user_for_genres():
+    genres = []
+    while True:
+        genre = input("enter favourite genre, exit to quit: ")
+        if genre.strip().lower() == EXIT:
+            break
+        genres.append(genre)
+
+    return genres
+
+
+def main():
+    users = []
+    while True:
+        username = input("enter username, exit to break: ")
+        if username.strip() == EXIT:
+            break
+        UserAuthenticate.login(username)
+
+        movies = ask_user_for_movies()
+        genres = ask_user_for_genres()
+
+        user = User(username, movies, genres)
+        users.append(user)
 
 
 if __name__ == '__main__':
