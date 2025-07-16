@@ -1,24 +1,11 @@
 from movie import Movie
 from user_authenticate import UserAuthenticate
 from user import User
+from movie_database import MovieDatabase
+from ui import UI
 
-END_COLOR = "\033[0m"
+JSON_MOVIES_PATH = "./movies_data.json"
 EXIT = "exit"
-
-
-def print_movies(movies: list[str]):
-    print("movies list:\n")
-    for i, m in enumerate(movies, 1):
-        print(f"{i}. {m}")
-
-
-def print_ranking_stats(movies: dict[str, int]):
-    rankings = movies.values()
-    print(f"\033[31maverage ranking is {sum(rankings) / len(rankings)}" + END_COLOR)
-    movie_with_max_value = max(movies, key=movies.get)
-    print(f"\033[38;5;208mmovie with max ranking is: {movie_with_max_value}" + END_COLOR)
-    movie_with_min_value = min(movies, key=movies.get)
-    print(f"\033[95mmovie with min ranking is: {movie_with_min_value}" + END_COLOR)
 
 
 def recommend_by_genre(movies: list[Movie], genre_list: list[str]):
@@ -27,7 +14,7 @@ def recommend_by_genre(movies: list[Movie], genre_list: list[str]):
     return recommended_movies
 
 
-def ask_user_for_movies():
+def ask_user_for_movies(use_ranking=False):
     movies = []
 
     while True:
@@ -37,9 +24,12 @@ def ask_user_for_movies():
         if movie_name in [movie.name for movie in movies]:
             print("movie already exist")
             continue
-        ranking = int(input("enter movie ranking, from 1 to 10: "))
         genre = input("enter movie genre: ")
-        movie = Movie(movie_name, ranking, genre)
+        if use_ranking:
+            ranking = int(input("enter movie ranking, from 1 to 10: "))
+            movie = Movie(movie_name, genre, ranking)
+        else:
+            movie = Movie(movie_name, genre)
         movies.append(movie)
     return movies
 
@@ -61,30 +51,22 @@ def ask_for_users():
         username = input("enter username, exit to break: ")
         if username.strip() == EXIT:
             break
-        UserAuthenticate.login(username)
 
-        movies = ask_user_for_movies()
+        password = input("enter password: ")
+
+        movies = ask_user_for_movies(use_ranking=True)
         genres = ask_user_for_genres()
 
-        user = User(username, movies, genres)
+        user = User(username, movies, genres, password)
         users.append(user)
     return users
 
 
 def main():
-    users = [User("lior", [Movie("movie1", 9, "comedy")], ["comedy"]),
-             User("lior2", [Movie("movie1", 9, "comedy"), Movie("movie3", 10, "comedy")], ["drama", "comedy"]),
-             User("lior3", [Movie("movie1", 9, "comedy"), Movie("movie4", 6, "drama")], ["drama", "comedy"])]
-
-    username = input("enter username: ")
-    UserAuthenticate.login(username)
-    current_user = [user for user in users if users if user.name == username][0]
-    similar_users = [user for user in users if current_user.has_joined_movies(user) and user.name != username]
-    for user in similar_users:
-        print(f"loved movies by {user.name}:")
-        for movie in user.movies:
-            if movie.name not in current_user.get_movie_names():
-                print(movie)
+    movie_database = MovieDatabase(JSON_MOVIES_PATH)
+    user = UserAuthenticate.login(movie_database, "lior", "lior123")
+    movies = user.get_movie_names()
+    UI.print_ranking_stats(user)
 
 
 if __name__ == '__main__':

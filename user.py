@@ -2,10 +2,11 @@ from movie import Movie
 
 
 class User:
-    def __init__(self, name: str, movies: list[Movie], recommended_genres: list[str]):
-        self.name = name
+    def __init__(self, username: str, movies: list[Movie], genres: list[str], password: str):
+        self.username = username
         self.movies = movies
-        self.recommended_genres = recommended_genres
+        self.genres = genres
+        self.password = password
 
     def get_movie_names(self):
         return [movie.name for movie in self.movies]

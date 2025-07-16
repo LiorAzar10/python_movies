@@ -1,0 +1,49 @@
+{
+  "users": [
+    {
+      "username": "lior",
+      "movies": [
+        {
+          "name": "sharks",
+          "genre": "drama",
+          "ranking": 10
+        },
+        {
+          "name": "pp",
+          "genre": "comedy",
+          "ranking": 8
+        }
+      ],
+      "genres": [
+        "drama"
+      ],
+      "password": "lior123"
+    },
+    {
+      "username": "user2",
+      "movies": [
+        {
+          "name": "poi",
+          "genre": "action",
+          "ranking": 6
+        }
+      ],
+      "genres": [
+        "drama",
+        "comedy"
+      ],
+      "password": "user2123"
+    }
+  ],
+  "movies": [
+    {
+      "name": "sharks",
+      "genre": "drama"
+    },
+    {
+      "name": "bilbi",
+      "genre": "drama"
+    }
+  ],
+  "genres": []
+}
